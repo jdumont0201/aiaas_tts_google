@@ -6,33 +6,36 @@ const textToSpeech = require('@google-cloud/text-to-speech');
 const client = new textToSpeech.TextToSpeechClient();// Creates a client
 
 module.exports = {// The text to synthesize
- task:function(text,outputName,outputPath,f){
-   console.log("TASK",text,outputName)
+  runTask: async function (options) {
+    //READ OPTIONS
+    let text = options.text;
+    let outputName = options.outputName;
+    let outputPath = options.outputPath;
+    let format = options.format;
 
-  const request = {
-    input: {text: text},
-    voice: {languageCode: 'en-US', ssmlGender: 'NEUTRAL'},  
-    audioConfig: {audioEncoding: 'MP3'},
-  };
+    console.log("TASK", options)
 
 
-  client.synthesizeSpeech(request, (err, response) => {// Performs the Text-to-Speech request
-    if (err) {
-      console.error('ERROR:', err);
-      f({success:false,error:err,code:"SYNTHESIZE",output:outputName})
-      return;
-    }
-    console.log("WRITE",outputPath)
-    fs.writeFile(outputPath, response.audioContent, 'binary', err => {// Write the binary audio content to a local file
-      if (err) {
-        console.log("err",err)
-        f({success:false,error:err,code:"WRITE_FILE_ERROR",output:outputName})
-        return;
-      }else{
-        f({success:true,output:outputName})
-      }
-      
-    });
-  });
-}
+    const request = {
+      input: { text: text },
+      voice: { languageCode: 'en-US', ssmlGender: 'NEUTRAL' },
+      audioConfig: { audioEncoding: format },
+    };
+    return new Promise((resolve, reject) => {
+
+      return client.synthesizeSpeech(request, async (err, response) => {// Performs the Text-to-Speech request
+        if (err) {
+          return reject({ success: false, error: err, code: "SYNTHESIZE", output: outputName })
+        }
+
+        fs.writeFile(outputPath, response.audioContent, 'binary', err => {// Write the binary audio content to a local file
+          if (err) {
+            return reject({ success: false, error: err, code: "WRITE_FILE_ERROR", output: outputName })
+          } else {
+            return resolve({ success: true, output: outputName })
+          }
+        });
+      });
+    })
+  }
 }

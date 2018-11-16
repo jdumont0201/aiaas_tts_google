@@ -6,8 +6,7 @@
     "scripts": {},
     "dependencies": {
         "@google-cloud/text-to-speech": "*",
-        "cors":"2.8.5",
-        "body-parser": "^1.18.3",
-        "express": "^4.16.4"
+        "@aheadai/unit":"*",
+        "path":"0.12.7"
     }
 }
