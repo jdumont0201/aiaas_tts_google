@@ -13,4 +13,6 @@ RUN node -v
 EXPOSE 3000
 
 
+
+CMD chmod -r 777 /ai/src
 CMD ["node","/ai/src/server.js"]

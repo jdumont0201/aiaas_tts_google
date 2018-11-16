@@ -4,7 +4,7 @@ const {Storage} = require('@google-cloud/storage');
 //STORAGE SPACE
 const projectId = 'prospect-222508';// Your Google Cloud Platform project ID
 const storage = new Storage({  projectId: projectId,}); // Creates a client
-const externalLinkBase="https://storage.cloud.google.com/"
+const externalLinkBase="https://storage.googleapis.com/"
 
 module.exports={
     store:async function(filename,filePath,bucketName,f){

@@ -25,7 +25,8 @@ module.exports = {// The text to synthesize
     console.log("WRITE",outputPath)
     fs.writeFile(outputPath, response.audioContent, 'binary', err => {// Write the binary audio content to a local file
       if (err) {
-        f({success:false,error:err,code:"WRITE_FILE",output:outputName})
+        console.log("err",err)
+        f({success:false,error:err,code:"WRITE_FILE_ERROR",output:outputName})
         return;
       }else{
         f({success:true,output:outputName})
